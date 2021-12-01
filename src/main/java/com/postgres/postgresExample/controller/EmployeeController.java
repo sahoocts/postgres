@@ -34,6 +34,19 @@ public ResponseEntity<Employee> getEmployeeById(@PathVariable(value= "id") Long 
     return ResponseEntity.ok().body(emp1);
 }
 
+@PutMapping("/employees/{id}")
+public ResponseEntity<Employee> updateEmployee(@PathVariable (value="id") Long employeeId, @RequestBody Employee empDetails) throws ResourceNotFoundException{
+    Employee emp2=employeeRepository.findById(employeeId).orElseThrow(()->new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
+    emp2.setEmailId(empDetails.getEmailId());
+    emp2.setLastName(empDetails.getLastName());
+    emp2.setFirstName(empDetails.getFirstName());
+    final Employee updateEmployee=employeeRepository.save(emp2);
+    return ResponseEntity.ok(updateEmployee);
+
+}
+
+
+
 @DeleteMapping("employees/{id}")
 public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable("id") Long id) {
     try{
